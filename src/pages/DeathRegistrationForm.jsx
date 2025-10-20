@@ -18,9 +18,6 @@ const DeathRegistrationForm = () => {
     cause_of_death: '',
     informant_name: '',
     informant_relationship: '',
-    informant_email: '',
-    informant_phone: '',
-    informant_address: '',
     registrar_name: '',
   });
 
@@ -72,8 +69,7 @@ const DeathRegistrationForm = () => {
         }
       });
 
-      // Add applied_by (citizen ID)
-      submitData.append('applied_by', storedUser.citizen_id);
+     
 
       // Add files
       if (files.death_certificate_scan) {
@@ -263,13 +259,14 @@ const DeathRegistrationForm = () => {
                     </Col>
                     <Col md={6}>
                       <Form.Group className="mb-3">
-                        <Form.Label>Registrar Name</Form.Label>
+                        <Form.Label>Registrar Name *</Form.Label>
                         <Form.Control
                           type="text"
                           name="registrar_name"
                           value={formData.registrar_name}
                           onChange={handleChange}
-                          placeholder="Name of the registrar (if known)"
+                          placeholder="Name of the registrar"
+                          required
                         />
                       </Form.Group>
                     </Col>
@@ -320,43 +317,7 @@ const DeathRegistrationForm = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Residential Address *</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      name="informant_address"
-                      value={formData.informant_address}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Email Address *</Form.Label>
-                        <Form.Control
-                          type="email"
-                          name="informant_email"
-                          value={formData.informant_email}
-                          onChange={handleChange}
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Phone Number *</Form.Label>
-                        <Form.Control
-                          type="tel"
-                          name="informant_phone"
-                          value={formData.informant_phone}
-                          onChange={handleChange}
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
+                  
                 </Card.Body>
               </Card>
 

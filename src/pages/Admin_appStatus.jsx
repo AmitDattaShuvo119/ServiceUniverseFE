@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { FaHeartbeat } from "react-icons/fa";
 
 const SERVICE_CARDS = [
   { id: "births", title: "Birth Registrations", desc: "Pending birth certificate applications", adminEndpoint: "/birthRecords/api/birth-records/admin/pending" },
@@ -48,6 +49,22 @@ const Admin_appStatus = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Vaccination Management Card */}
+      <div className="row g-3 mb-4">
+        <div className="col-12 col-md-6 col-lg-4 mx-auto">
+          <div className="card h-100" style={{cursor:'pointer'}} onClick={() => navigate('/services/add-vaccination-record')}>
+            <div className="card-body text-center">
+              <FaHeartbeat className="text-success mb-3" size={40} />
+              <h5 className="card-title">Vaccination Records</h5>
+              <p className="card-text text-muted">Manage citizen vaccination records and certificates</p>
+              <button className="btn btn-success">
+                Add Vaccination Record
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div>

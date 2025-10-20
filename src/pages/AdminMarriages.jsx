@@ -159,7 +159,7 @@ const AdminMarriages = () => {
                       <td>
                         <button
                           className={`btn btn-sm ${styles.actionButton}`}
-                          onClick={() => navigate(`/admin-applications/view/marriages/${app.id}`)}
+                          onClick={() => navigate(`/admin-applications/view/marriages/${app.marriage_certificate_number}`)}
                         >
                           <FaEye className="me-1" />
                           View Details

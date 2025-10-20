@@ -155,7 +155,7 @@ const AdminDeaths = () => {
                       <td>
                         <button
                           className={`btn btn-sm ${styles.actionButton}`}
-                          onClick={() => navigate(`/admin-applications/view/deaths/${app.id}`)}
+                          onClick={() => navigate(`/admin-applications/view/deaths/${app.death_certificate_number}`)}
                         >
                           <FaEye className="me-1" />
                           View Details

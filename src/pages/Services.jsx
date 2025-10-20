@@ -14,82 +14,15 @@ import {
 import { Link } from "react-router-dom";
 import styles from "./Services.module.css";
 
-const servicesData = [
-  {
-    title: "Civil Registration",
-    icon: <FaBook />,
-    subServices: [
-      { name: "Register a Birth", link: "/services/birth-registration" },
-      { name: "Register a Death", link: "/services/death-registration" },
-      { name: "Register a Marriage", link: "/services/marriage-registration" },
-    ],
-  },
-  {
-    title: "Vaccination Records",
-    icon: <FaHeartbeat />,
-    subServices: [
-      {
-        name: "Add a Vaccination Record",
-        link: "/services/vaccination-records",
-      },
-      { name: "View Immunaization History", link: "/" },
-    ],
-  },
-  {
-    title: "Working With Children Check (WWCC)",
-    icon: <FaChild />,
-    subServices: [
-      { name: "Apply for WWCC Certificate", link: "/services/wwcc" },
-      { name: "View My Application", link: "/services/wwcc-status" },
-      { name: "View or Download Certificate", link: "/services/wwcc-status" },
-    ],
-  },
-  {
-    title: "Australian Taxation Office – ATO",
-    icon: <FaFileInvoiceDollar />,
-    subServices: [
-      { name: "Income Tax Returns and Assessments", link: "/tax-estimator" },
-      { name: "Superannuation and Business Tax", link: "/" },
-    ],
-  },
-  {
-    title: "Centrelink",
-    icon: <FaUsers />,
-    subServices: [{ name: "Apply for Financial Assistance ", link: "/" }],
-  },
-  {
-    title: "Australian Computer Society (ACS)",
-    icon: <FaLaptopCode />,
-    subServices: [
-      { name: "Skills Assessment", link: "/" },
-      { name: "Student Memberships", link: "/" },
-    ],
-  },
-  {
-    title: "Family History & Genealogy",
-    icon: <FaLandmark />,
-    subServices: [{ name: "Family History and Genealogy Service", link: "/" }],
-  },
-  {
-    title: "Home Affairs ImmiAccount",
-    icon: <FaGlobeAmericas />,
-    subServices: [
-      {
-        name: "Visa applications and status tracking",
-        link: "/services/immi-visa",
-      },
-      {
-        name: "Citizenship and sponsorship",
-        link: "/services/immi-citizenship",
-      },
-    ],
-  },
-];
-
 const ServicesPage = () => {
   const [wwccStatus, setWwccStatus] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    // Check if user is admin
+    const adminData = JSON.parse(localStorage.getItem('admin')) || {};
+    setIsAdmin(!!adminData.token);
+
     // Fetch WWCC application status if logged in user has an application
     const fetchWWCCStatus = async () => {
       try {
@@ -112,6 +45,87 @@ const ServicesPage = () => {
     fetchWWCCStatus();
   }, []);
 
+  // Dynamic services data based on user role
+  const getServicesData = () => {
+    const baseServices = [
+      {
+        title: "Civil Registration",
+        icon: <FaBook />,
+        subServices: [
+          { name: "Register a Birth", link: "/services/birth-registration" },
+          { name: "Register a Death", link: "/services/death-registration" },
+          { name: "Register a Marriage", link: "/services/marriage-registration" },
+        ],
+      },
+      {
+        title: "Vaccination Records",
+        icon: <FaHeartbeat />,
+        subServices: [
+          {
+            name: "View Vaccination Records",
+            link: "/services/vaccination-records",
+          },
+          // Add admin option if user is admin
+          ...(isAdmin ? [{
+            name: "Add Vaccination Record",
+            link: "/services/add-vaccination-record",
+          }] : []),
+        ],
+      },
+      {
+        title: "Working With Children Check (WWCC)",
+        icon: <FaChild />,
+        subServices: [
+          { name: "Apply for WWCC Certificate", link: "/services/wwcc" },
+          { name: "View My Application", link: "/services/wwcc-status" },
+          { name: "View or Download Certificate", link: "/services/wwcc-status" },
+        ],
+      },
+      {
+        title: "Australian Taxation Office – ATO",
+        icon: <FaFileInvoiceDollar />,
+        subServices: [
+          { name: "Income Tax Returns and Assessments", link: "/tax-estimator" },
+          { name: "Superannuation and Business Tax", link: "/" },
+        ],
+      },
+      {
+        title: "Centrelink",
+        icon: <FaUsers />,
+        subServices: [{ name: "Apply for Financial Assistance ", link: "/" }],
+      },
+      {
+        title: "Australian Computer Society (ACS)",
+        icon: <FaLaptopCode />,
+        subServices: [
+          { name: "Skills Assessment", link: "/" },
+          { name: "Student Memberships", link: "/" },
+        ],
+      },
+      {
+        title: "Family History & Genealogy",
+        icon: <FaLandmark />,
+        subServices: [{ name: "Family History and Genealogy Service", link: "/" }],
+      },
+      {
+        title: "Home Affairs ImmiAccount",
+        icon: <FaGlobeAmericas />,
+        subServices: [
+          {
+            name: "Visa applications and status tracking",
+            link: "/services/immi-visa",
+          },
+          {
+            name: "Citizenship and sponsorship",
+            link: "/services/immi-citizenship",
+          },
+        ],
+      },
+    ];
+
+    return baseServices;
+  };
+
   return (
     <div className={styles.pageContainer}>
       <header className={styles.heroSection}>
@@ -126,7 +140,7 @@ const ServicesPage = () => {
       {/* Services Grid */}
       <Container className="py-5">
         <Row xs={1} md={2} lg={3} className="g-4">
-          {servicesData.map((service, index) => (
+          {getServicesData().map((service, index) => (
             <Col key={index}>
               <Card className={`${styles.serviceCard} h-100`}>
                 <Card.Header className={styles.cardHeader}>
@@ -207,6 +221,35 @@ const ServicesPage = () => {
             </Col>
           ))}
         </Row>
+
+        {/* Admin-only Vaccination Management Card */}
+        {isAdmin && (
+          <Row className="mt-4">
+            <Col md={6} lg={4} className="mx-auto">
+              <Card className={`${styles.serviceCard} ${styles.adminCard} h-100`}>
+                <Card.Header className={styles.cardHeader}>
+                  <div className={styles.iconWrapper}>
+                    <FaHeartbeat />
+                  </div>
+                  <Card.Title as="h3" className={styles.cardTitle}>
+                    Vaccination Administration
+                  </Card.Title>
+                </Card.Header>
+                <Card.Body className="d-flex flex-column">
+                  <p className="text-muted mb-3">
+                    Administrative tools for managing citizen vaccination records.
+                  </p>
+                  <Link
+                    to="/services/add-vaccination-record"
+                    className={`btn btn-primary mt-auto ${styles.actionButton}`}
+                  >
+                    Add Vaccination Record <FaArrowRight className="ms-2" />
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        )}
       </Container>
     </div>
   );

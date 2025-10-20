@@ -22,9 +22,12 @@ import DeathRegistrationForm from "../pages/DeathRegistrationForm";
 import DeathRegistration from "../pages/DeathRegistration";
 import MarriageRegistration from "../pages/MarriageRegistration";
 import MarriageRegistrationForm from "../pages/MarriageRegistrationForm";
+import DeathCertificate from "../pages/DeathCertificate";
+import MarriageCertificate from "../pages/MarriageCertificate";
 import AddVaccinationRecord from "../pages/AddVaccinationRecordForm";
 import UserDashboard from "../pages/UserDashboard";
 import VaccinationRecords from "../pages/VccinationRecords";
+import VaccinationCertificate from "../pages/VaccinationCertificate";
 import Login_Admin from "../pages/Login_Admin";
 import Admin_appStatus from "../pages/Admin_appStatus";
 import AdminViewApplication from "../pages/AdminViewApplication";
@@ -104,6 +107,14 @@ export const router = createBrowserRouter([
         element: <BirthCertificate />,
       },
       {
+        path: "services/death-certificate/:certificateNumber",
+        element: <DeathCertificate />,
+      },
+      {
+        path: "services/marriage-certificate/:certificateNumber",
+        element: <MarriageCertificate />,
+      },
+      {
         path: "services/wwcc-certificate/:id",
         element: <WWCCCertificate />,
       },
@@ -138,6 +149,10 @@ export const router = createBrowserRouter([
       {
         path: "services/vaccination-records",
         element: <VaccinationRecords />,
+      },
+      {
+        path: "services/vaccination-certificate/:certificateId",
+        element: <VaccinationCertificate />,
       },
       {
         path: "user-dashboard",

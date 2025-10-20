@@ -102,8 +102,6 @@ const MarriageRegistrationForm = () => {
         }
       });
 
-      // Add applied_by (citizen ID)
-      submitData.append('applied_by', storedUser.citizen_id);
 
       // Add files
       if (files.marriage_certificate_scan) {

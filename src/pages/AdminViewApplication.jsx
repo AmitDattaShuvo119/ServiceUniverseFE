@@ -62,6 +62,7 @@ const AdminViewApplication = () => {
         const res = await fetch(fetchUrl, { headers: { Authorization: `Bearer ${adminData.token}` } });
         if (!res.ok) throw new Error('Failed to fetch record');
         const body = await res.json();
+        console.log(body)
         setRecord(body.data || body);
       } catch (err) {
         setError(err.message);
@@ -82,7 +83,7 @@ const AdminViewApplication = () => {
       const base = serviceConfig.endpoint.startsWith('/') ? serviceConfig.endpoint : `/${serviceConfig.endpoint}`;
 
       // For births, use birth certificate number; for others, use record.id
-      const approvalId = service === 'births' ? (record.birth_certificate_number || record.certificateNumber) : record.id;
+      const approvalId = service === 'births' ? (record.birth_certificate_number || record.certificateNumber) : service==='deaths' ? (record.death_certificate_number):record.id;
 
       const res = await fetch(
         `http://localhost:3000/api/services${base}/${approvalId}/approve`,
@@ -300,6 +301,54 @@ const AdminViewApplication = () => {
                     {renderField('deceased_citizen_id', record.deceased_citizen_id)}
                     {renderField('place_of_death', record.place_of_death)}
                     {renderField('cause_of_death', record.cause_of_death)}
+                    {record.death_certificate_scan_path && (
+                      <div className="mb-3">
+                        <dt className="col-sm-4 fw-semibold text-muted">Death Certificate Scan:</dt>
+                        <dd className="col-sm-8">
+                          {record.death_certificate_scan_path.split(',').map((doc, i) => (
+                            <a
+                              key={i}
+                              href={`http://localhost:3000${doc}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="btn btn-sm btn-outline-primary me-2 mb-1"
+                            >
+                              <FaEye className="me-1" />
+                              View Doc {i + 1}
+                            </a>
+                          ))}
+                        </dd>
+                      </div>
+                    )}
+                    {(() => {
+                      try {
+                        const docs = typeof record.supporting_documents_paths === 'string'
+                          ? JSON.parse(record.supporting_documents_paths)
+                          : record.supporting_documents_paths;
+                        return docs && docs.length > 0 && (
+                          <div className="mb-3">
+                            <dt className="col-sm-4 fw-semibold text-muted">Supporting Documents:</dt>
+                            <dd className="col-sm-8">
+                              {docs.map((doc, i) => (
+                                <a
+                                  key={i}
+                                  href={`http://localhost:3000${doc}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="btn btn-sm btn-outline-primary me-2 mb-1"
+                                >
+                                  <FaEye className="me-1" />
+                                  View Doc {i + 1}
+                                </a>
+                              ))}
+                            </dd>
+                          </div>
+                        );
+                      } catch (error) {
+                        console.error('Error parsing supporting documents:', error);
+                        return null;
+                      }
+                    })()}
                   </>
                 )}
 
@@ -346,6 +395,7 @@ const AdminViewApplication = () => {
                         </dd>
                       </div>
                     )}
+                    
                   </>
                 )}
 
@@ -353,7 +403,7 @@ const AdminViewApplication = () => {
                 {Object.keys(record).map(key => {
                   const specialFields = {
                     births: ['birth_certificate_number', 'child_first_name', 'child_last_name', 'date_of_birth', 'mother_first_name', 'mother_last_name', 'mother_citizen_id', 'father_first_name', 'father_last_name', 'father_citizen_id'],
-                    deaths: ['deceased_first_name', 'deceased_last_name', 'date_of_death', 'deceased_citizen_id', 'place_of_death', 'cause_of_death'],
+                    deaths: ['deceased_first_name', 'deceased_last_name', 'date_of_death', 'deceased_citizen_id', 'place_of_death', 'cause_of_death', 'death_certificate_scan_path','supporting_documents_paths'],
                     marriages: ['spouse1_first_name', 'spouse1_last_name', 'spouse1_citizen_id', 'spouse2_first_name', 'spouse2_last_name', 'spouse2_citizen_id', 'marriage_date', 'marriage_place'],
                     wwcc: ['application_number', 'first_name', 'last_name', 'citizen_id', 'date_of_birth', 'gender', 'email', 'phone_number', 'address', 'identity_documents']
                   };
