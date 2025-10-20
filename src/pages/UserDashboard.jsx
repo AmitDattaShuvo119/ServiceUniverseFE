@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./UserDashboard.module.css";
 import {
   Archive,
@@ -198,6 +199,31 @@ const getStatusClasses = (status) => {
 
 const ServiceCard = ({ service }) => {
   const Icon = service.icon;
+  const navigate = useNavigate();
+
+  // mapping from service id + link name to route paths
+  const routeMap = {
+    civil: {
+      'Register a Birth': '/services/birth-status',
+      'Register a Death': '/services/death-status',
+      'Register a Marriage': '/services/marriage-status',
+    },
+    vaccination: {
+      'View Digital Certificate': '/services/vaccination-records',
+    },
+    wwcc: {
+      'Check Status & Apply': '/services/wwcc-status',
+    },
+  };
+
+  const onLinkClick = (link) => (e) => {
+    e.preventDefault();
+    const svc = service.id;
+    const target = routeMap[svc] && routeMap[svc][link.name];
+    if (target) return navigate(target);
+    // fallback: no route mapped — do nothing
+  };
+
   return (
     <div className={styles.serviceCard}>
       <div className={styles.cardContent}>
@@ -221,7 +247,7 @@ const ServiceCard = ({ service }) => {
               <a
                 key={idx}
                 href="#"
-                onClick={(e) => e.preventDefault()}
+                onClick={onLinkClick(link)}
                 className={styles.linkItem}
               >
                 <div className={styles.linkNameGroup}>
@@ -252,6 +278,7 @@ const ServiceCard = ({ service }) => {
 // --- MAIN DASHBOARD ---
 const UserDashboard = () => {
   const [userData, setUserData] = useState(null);
+  const [services, setServices] = useState(SERVICE_DATA);
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const token = storedUser?.token || "";
 
@@ -278,6 +305,83 @@ const UserDashboard = () => {
     };
 
     fetchUserData();
+  }, [token]);
+
+  // Fetch summary and use it to update Identity & Life Events services
+  useEffect(() => {
+    const fetchSummary = async () => {
+      if (!token) return;
+      try {
+        const res = await fetch('http://localhost:3000/api/citizens/summary', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) return; // keep UI as-is on failure
+        const body = await res.json();
+        const summary = body.data || {};
+
+        // Helper to derive status and detail from records — service-specific
+  const deriveStatus = (records, opts = {}) => {
+          const { dateFields = [], primaryStatusField } = opts;
+          if (!Array.isArray(records) || records.length === 0) {
+            // No records: show neutral 'Not Started' with actionable hint
+            return { status: 'Not Started', detail: 'Start Application' };
+          }
+
+          // take latest record
+          const latest = records[records.length - 1];
+          // If a specific status field exists, use that first
+          const approvalRaw = primaryStatusField ? (latest[primaryStatusField] || '') : (latest.approval_status || '');
+          const approval = (approvalRaw || '').toString().toLowerCase();
+          if (approval === 'approved' || approval === 'complete' || approval === 'completed') return { status: 'Completed', detail: 'Certificate Ready' };
+          if (approval === 'rejected' || approval === 'denied') return { status: 'Action Required', detail: 'Application Rejected' };
+
+          // fallback pending: try a list of possible date fields to provide a friendly detail
+          const date = dateFields.reduce((acc, f) => acc || latest[f], null) || latest.created_at;
+          const d = date ? `Submitted ${new Date(date).toLocaleDateString()}` : 'Submitted';
+          return { status: 'Pending', detail: d };
+        };
+
+        const newServices = SERVICE_DATA.map(s => {
+          if (s.id === 'civil') {
+            const birthInfo = deriveStatus(summary.birthRecords, { dateFields: ['registration_date','date_of_birth','created_at'], primaryStatusField: 'approval_status' });
+            const deathInfo = deriveStatus(summary.deathRecords, { dateFields: ['registration_date','date_of_death','created_at'], primaryStatusField: 'approval_status' });
+            const marriageInfo = deriveStatus(summary.marriageRecords, { dateFields: ['registration_date','marriage_date','created_at'], primaryStatusField: 'approval_status' });
+            return {
+              ...s,
+              links: [
+                { name: 'Register a Birth', status: birthInfo.status, detail: birthInfo.detail },
+                { name: 'Register a Death', status: deathInfo.status, detail: deathInfo.detail },
+                { name: 'Register a Marriage', status: marriageInfo.status, detail: marriageInfo.detail }
+              ]
+            };
+          }
+
+          if (s.id === 'vaccination') {
+            const v = Array.isArray(summary.vaccinationRecords) ? summary.vaccinationRecords : [];
+            if (v.length === 0) return { ...s, links: [{ name: 'View Digital Certificate', status: 'Not Started', detail: 'No records' }] };
+            // if records exist, show latest date or count
+            const latest = v[v.length -1];
+            const date = latest.administered_at || latest.date_administered || latest.date || latest.created_at;
+            const detail = date ? `Last: ${new Date(date).toLocaleDateString()}` : `${v.length} record(s)`;
+            return { ...s, links: [{ name: 'View Digital Certificate', status: 'Completed', detail }] };
+          }
+
+          if (s.id === 'wwcc') {
+            const w = Array.isArray(summary.wwccApplications) ? summary.wwccApplications : [];
+            const info = deriveStatus(w, { dateFields: ['applied_at','created_at'], primaryStatusField: 'status' });
+            return { ...s, links: [{ name: 'Check Status & Apply', status: info.status, detail: info.detail }] };
+          }
+
+          return s;
+        });
+
+        setServices(newServices);
+      } catch (err) {
+        console.error('Error fetching summary:', err);
+      }
+    };
+
+    fetchSummary();
   }, [token]);
 
   const categories = SERVICE_DATA.reduce((acc, service) => {
@@ -331,13 +435,15 @@ const UserDashboard = () => {
         )}
 
         <div className={styles.categorySectionWrapper}>
-          {Object.entries(categories).map(([category, services]) => (
+          {Object.entries(categories).map(([category, _services]) => (
             <section key={category} className={styles.categorySection}>
               <h2 className={styles.categoryTitle}>{category}</h2>
               <div className={styles.serviceGrid}>
-                {services.map((service) => (
-                  <ServiceCard key={service.id} service={service} />
-                ))}
+                {_services.map((service) => {
+                  // pick the updated service definition if it's in our services state
+                  const updated = services.find(s => s.id === service.id) || service;
+                  return <ServiceCard key={service.id} service={updated} />
+                })}
               </div>
             </section>
           ))}

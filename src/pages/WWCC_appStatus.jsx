@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const WWCC_appStatus = () => {
   const [applicationData, setApplicationData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [noApplication, setNoApplication] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchApplicationData = async () => {
@@ -35,7 +38,7 @@ const WWCC_appStatus = () => {
         const data = await response.json();
 
         if (!data?.data || data.data.length === 0) {
-          setError("No WWCC application found for this account.");
+          setNoApplication(true);
           setLoading(false);
           return;
         }
@@ -44,6 +47,7 @@ const WWCC_appStatus = () => {
         const latestApp = data.data[data.data.length - 1];
 
         setApplicationData({
+          id: latestApp.id,
           submittedDate: new Date(latestApp.created_at).toLocaleDateString(),
           status:
             latestApp.approval_status.charAt(0).toUpperCase() +
@@ -72,10 +76,22 @@ const WWCC_appStatus = () => {
     );
   }
 
-  if (error) {
+  if (error && !noApplication) {
     return (
       <div className="container mt-5 text-center" style={{ minHeight: "90vh" }}>
         <h2 className="text-danger">{error}</h2>
+      </div>
+    );
+  }
+
+  if (noApplication && !loading) {
+    return (
+      <div className="container mt-5 text-center" style={{ minHeight: '90vh' }}>
+        <h2>No WWCC application found for this account.</h2>
+        <p>If you'd like to apply for a WWCC, click the button below to start a new application.</p>
+        <div style={{ marginTop: '20px' }}>
+          <button className="btn btn-primary" onClick={() => navigate('/services/wwcc')}>Apply for WWCC</button>
+        </div>
       </div>
     );
   }
@@ -120,7 +136,12 @@ const WWCC_appStatus = () => {
               </button>
             )}
             {applicationData.status === "Approved" && (
-              <button className="btn btn-success">View Certificate</button>
+              <button
+                className="btn btn-success"
+                onClick={() => navigate(`/services/wwcc-certificate/${applicationData.id}`)}
+              >
+                View Certificate
+              </button>
             )}
             {applicationData.status === "Rejected" && (
               <button className="btn btn-danger">Contact Support</button>

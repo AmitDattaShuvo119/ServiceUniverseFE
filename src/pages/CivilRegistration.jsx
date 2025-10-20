@@ -34,6 +34,11 @@ const CivilRegistration = () => {
                 <Button as={Link} to="/services/birth-registration" variant="primary" className={`mt-3 ${styles.actionButton}`}>
                   Start application <FaArrowRight className="ms-2" />
                 </Button>
+                <div className="mt-2">
+                  <Button as={Link} to="/services/birth-status" variant="outline-secondary" className="mt-2">
+                    View my applications
+                  </Button>
+                </div>
               </Card.Body>
             </Card>
           </Col>
@@ -52,6 +57,11 @@ const CivilRegistration = () => {
                 <Button as={Link} to="/services/death-registration" variant="primary" className={`mt-3 ${styles.actionButton}`}>
                   Start application <FaArrowRight className="ms-2" />
                 </Button>
+                <div className="mt-2">
+                  <Button as={Link} to="/services/death-status" variant="outline-secondary" className="mt-2">
+                    View my applications
+                  </Button>
+                </div>
               </Card.Body>
             </Card>
           </Col>
@@ -69,6 +79,11 @@ const CivilRegistration = () => {
                 <Button as={Link} to="/services/marriage-registration" variant="primary" className={`mt-3 ${styles.actionButton}`}>
                   Start application <FaArrowRight className="ms-2" />
                 </Button>
+                <div className="mt-2">
+                  <Button as={Link} to="/services/marriage-status" variant="outline-secondary" className="mt-2">
+                    View my applications
+                  </Button>
+                </div>
               </Card.Body>
             </Card>
           </Col>

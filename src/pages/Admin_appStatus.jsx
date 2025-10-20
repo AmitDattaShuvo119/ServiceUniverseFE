@@ -1,110 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const SERVICE_CARDS = [
+  { id: "births", title: "Birth Registrations", desc: "Pending birth certificate applications", adminEndpoint: "/birthRecords/api/birth-records/admin/pending" },
+  { id: "deaths", title: "Death Registrations", desc: "Pending death certificate applications", adminEndpoint: "/deathRecords/api/death-records/admin/pending" },
+  { id: "marriages", title: "Marriage Registrations", desc: "Pending marriage certificate applications", adminEndpoint: "/marriageRecords/api/marriage-records/admin/pending" },
+  { id: "wwcc", title: "WWCC Applications", desc: "Pending WWCC screening applications", adminEndpoint: "wwccProvider/api/wwcc-applications/admin/pending" },
+];
+
 const Admin_appStatus = () => {
   const navigate = useNavigate();
-  const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // per-service pages will handle fetching
 
   useEffect(() => {
     const adminData = JSON.parse(localStorage.getItem("admin"));
     if (!adminData?.token) {
       navigate("/admin-login");
-      return;
     }
-
-    const fetchApplications = async () => {
-      setLoading(true);
-      setError("");
-
-      try {
-        const res = await fetch(
-          "http://localhost:3000/api/services/wwccProvider/api/wwcc-applications/pending",
-          {
-            headers: { Authorization: `Bearer ${adminData.token}` },
-          }
-        );
-
-        if (!res.ok) throw new Error("Failed to fetch applications");
-
-        const data = await res.json();
-        setApplications(data.data || []);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchApplications();
   }, [navigate]);
 
-  if (loading) return <div className="text-center mt-5">Loading...</div>;
-  if (error)
-    return (
-      <div className="text-center mt-5 text-danger">
-        <h5>{error}</h5>
-      </div>
-    );
+  
+
+  const onCardClick = (svc) => {
+    // navigate to per-service admin page
+    navigate(`/admin-applications/${svc.id}`);
+  };
 
   const adminData = JSON.parse(localStorage.getItem("admin")) || {};
 
   return (
-    <div className="container mt-5" style={{minHeight:"90vh"}}>
-      <h1 className="text-center mb-4">Admin - Pending WWCC Applications</h1>
-      <h5 className="text-center mb-4">
-        Welcome, {adminData.username || "Admin"}!
-      </h5>
+    <div className="container mt-4" style={{ minHeight: "90vh" }}>
+      <h1 className="text-center mb-3">Admin - Pending Applications</h1>
+      <h5 className="text-center mb-4">Welcome, {adminData.username || "Admin"}!</h5>
 
-      <div className="table-responsive">
-        <table className="table table-striped table-bordered align-middle">
-          <thead className="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Application ID</th>
-              <th>Application Number</th>
-              <th>Citizen ID</th>
-              <th>Applicant Name</th>
-              <th>Email</th>
-              <th>Submitted Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+      <div className="row g-3 mb-4">
+        {SERVICE_CARDS.map((svc) => (
+          <div className="col-12 col-md-6 col-lg-3" key={svc.id}>
+            <div className={`card h-100`} style={{cursor:'pointer'}} onClick={() => onCardClick(svc)}>
+              <div className="card-body">
+                <h5 className="card-title">{svc.title}</h5>
+                <p className="card-text text-muted">{svc.desc}</p>
+                <button className="btn btn-sm btn-outline-primary" onClick={(e) => { e.stopPropagation(); onCardClick(svc); }}>
+                  View Pending
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-          <tbody>
-            {applications.length === 0 ? (
-              <tr>
-                <td colSpan="8" className="text-center">
-                  No pending applications
-                </td>
-              </tr>
-            ) : (
-              applications.map((app, index) => (
-                <tr key={app.id}>
-                  <td>{index + 1}</td>
-                  <td>{app.id}</td>
-                  <td>{app.application_number || "N/A"}</td>
-                  <td>{app.citizen_id || "N/A"}</td>
-                  <td>{app.first_name + " " + (app.last_name || "")}</td>
-                  <td>{app.email || "N/A"}</td>
-                  <td>{new Date(app.created_at).toLocaleDateString()}</td>
-                  <td>
-                    <button
-                      className="btn btn-primary btn-sm"
-                      onClick={() =>
-                        navigate(`/view-wwccApp/${app.id}`)
-                      }
-                    >
-                      View
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      <div>
+      <div className="text-center text-muted">Select a service above to view pending applications.</div>
       </div>
     </div>
   );
