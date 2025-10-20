@@ -136,7 +136,7 @@ const AdminViewApplication = () => {
             Authorization: `Bearer ${adminData.token}`,
           },
           body: JSON.stringify({
-            rejection_reason: rejectionReason,
+            reason: rejectionReason,
             notes: `Application rejected: ${rejectionReason}`,
             rejected_by: adminData.username || 'Admin',
             rejected_at: new Date().toISOString()
@@ -436,7 +436,7 @@ const AdminViewApplication = () => {
               </div>
             )}
 
-            {service === 'wwcc' && (
+            {(
               <div className="mb-3">
                 <label htmlFor="rejectionReason" className="form-label">
                   Rejection Reason (required if rejecting)

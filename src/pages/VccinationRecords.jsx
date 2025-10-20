@@ -50,7 +50,7 @@ const VaccinationRecords = () => {
       }
       
       const recordsData = await recordsResponse.json();
-      console.log(recordsData)
+      console.log(JSON.stringify(recordsData))
       const citizenData = citizenResponse.ok ? await citizenResponse.json() : storedUser;
 
       // Structure data to match component expectations
@@ -297,7 +297,7 @@ const VaccinationRecords = () => {
                         <div className={`p-3 rounded ${vaccine.is_complete ? 'bg-success bg-opacity-10 border border-success' : 'bg-warning bg-opacity-10 border border-warning'}`}>
                           <h6 className="mb-2">{vaccine.vaccine_name}</h6>
                           <div className="d-flex justify-content-between">
-                            <small>Doses: {vaccine.doses_received}/{vaccine.total_doses_required}</small>
+                            <small>Total Doses: {vaccine.doses_received}</small>
                             {vaccine.is_complete && <FaCheckCircle className="text-success" />}
                           </div>
                           {vaccine.next_due_date && (

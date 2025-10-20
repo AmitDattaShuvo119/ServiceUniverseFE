@@ -36,34 +36,49 @@ const Navbar = () => {
       </div>
 
       <nav className={styles.desktopNav}>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? `${styles.navLink} ${styles.active}` : styles.navLink
-          }
-          end
-        >
-          Home
-        </NavLink>
+        {user?.type === "admin" ? (
+          <NavLink
+            to="/admin-applications"
+            className={({ isActive }) =>
+              isActive ? `${styles.navLink} ${styles.active}` : styles.navLink
+            }
+          >
+            Home
+          </NavLink>
+        ) : (
+          <>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.active}` : styles.navLink
+              }
+              end
+            >
+              Home
+            </NavLink>
 
-        <NavLink
-          to="/services"
-          className={({ isActive }) =>
-            isActive ? `${styles.navLink} ${styles.active}` : styles.navLink
-          }
-        >
-          Services
-        </NavLink>
+            <NavLink
+              to="/services"
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.active}` : styles.navLink
+              }
+            >
+              Services
+            </NavLink>
 
-        <a href="#support" className={styles.navLink}>
-          Support
-        </a>
+            <a href="#support" className={styles.navLink}>
+              Support
+            </a>
+          </>
+        )}
 
         <NavLink
           to={
             user?.type === "citizen"
               ? "/user-dashboard"
-              : "/services/wwcc-status"
+              : user?.type === "admin"
+              ? "/admin-applications"
+              : "/login"
           }
           className={({ isActive }) =>
             isActive ? `${styles.navLink} ${styles.active}` : styles.navLink

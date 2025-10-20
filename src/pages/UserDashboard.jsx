@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Card } from "react-bootstrap";
 import styles from "./UserDashboard.module.css";
 import {
   Archive,
@@ -404,32 +405,34 @@ const UserDashboard = () => {
 
       <div className={styles.mainContent}>
         {userData ? (
-          <div className={styles.personalInfoCard}>
-            <h2 className={styles.infoTitle}>Personal Information</h2>
-            <div className={styles.infoGrid}>
-              <p>
-                <strong>Full Name:</strong> {userData.first_name}{" "}
-                {userData.last_name}
-              </p>
-              <p>
-                <strong>Citizen ID: </strong>
-                {userData.citizen_id}
-              </p>{" "}
-              <p>
-                <strong>Email:</strong> {userData.email}
-              </p>
-              <p>
-                <strong>Phone:</strong> {userData.phone || "N/A"}
-              </p>
-              <p>
-                <strong>Address:</strong> {userData.address || "N/A"}
-              </p>
-              <p>
-                <strong>Date of Birth:</strong>{" "}
-                {userData.date_of_birth || "N/A"}
-              </p>
-            </div>
-          </div>
+          <Card className={`${styles.personalInfoCard} mb-4`}>
+            <Card.Body>
+              <Card.Title as="h2" className={styles.infoTitle}>Personal Information</Card.Title>
+              <div className={styles.infoGrid}>
+                <p>
+                  <strong>Full Name:</strong> {userData.first_name}{" "}
+                  {userData.last_name}
+                </p>
+                <p>
+                  <strong>Citizen ID: </strong>
+                  {userData.citizen_id}
+                </p>{" "}
+                <p>
+                  <strong>Email:</strong> {userData.email}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {userData.phone || "N/A"}
+                </p>
+                <p>
+                  <strong>Address:</strong> {userData.address || "N/A"}
+                </p>
+                <p>
+                  <strong>Date of Birth:</strong>{" "}
+                  {userData.date_of_birth || "N/A"}
+                </p>
+              </div>
+            </Card.Body>
+          </Card>
         ) : (
           <p>Loading your information...</p>
         )}

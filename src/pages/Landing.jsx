@@ -23,7 +23,7 @@ const LandingPage = () => {
     {
       icon: <FaCalculator />,
       title: "Working With Children Check",
-      text: "Apply for, renew, or check the status of your clearance.",
+      text: "Apply for, renew, or check the status of your WWCC.",
       link: "/services/wwcc"
     }
   ];
