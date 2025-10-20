@@ -142,9 +142,9 @@ const AdminMarriages = () => {
                         <div className="d-flex align-items-center">
                           <FaHeart className="text-danger me-2" />
                           <div>
-                            <strong>{(app.partner1_first_name || '') + ' ' + (app.partner1_last_name || '')}</strong>
+                            <strong>{(app.spouse1_first_name || '') + ' ' + (app.spouse1_last_name || '')}</strong>
                             <br />
-                            <small className="text-muted">& {(app.partner2_first_name || '') + ' ' + (app.partner2_last_name || '')}</small>
+                            <small className="text-muted">& {(app.spouse2_first_name || '') + ' ' + (app.spouse2_last_name || '')}</small>
                           </div>
                         </div>
                       </td>

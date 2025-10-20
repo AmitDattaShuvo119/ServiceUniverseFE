@@ -305,14 +305,14 @@ const AdminViewApplication = () => {
 
                 {service === 'marriages' && (
                   <>
-                    {renderField('partner1_first_name', record.partner1_first_name, true)}
-                    {renderField('partner1_last_name', record.partner1_last_name, true)}
-                    {renderField('partner1_citizen_id', record.partner1_citizen_id)}
-                    {renderField('partner2_first_name', record.partner2_first_name, true)}
-                    {renderField('partner2_last_name', record.partner2_last_name, true)}
-                    {renderField('partner2_citizen_id', record.partner2_citizen_id)}
+                    {renderField('spouse1_first_name', record.spouse1_first_name, true)}
+                    {renderField('spouse1_last_name', record.spouse1_last_name, true)}
+                    {renderField('spouse1_citizen_id', record.spouse1_citizen_id)}
+                    {renderField('spouse2_first_name', record.spouse2_first_name, true)}
+                    {renderField('spouse2_last_name', record.spouse2_last_name, true)}
+                    {renderField('spouse2_citizen_id', record.spouse2_citizen_id)}
                     {renderField('marriage_date', record.marriage_date)}
-                    {renderField('ceremony_location', record.ceremony_location)}
+                    {renderField('marriage_place', record.marriage_place)}
                   </>
                 )}
 
@@ -354,7 +354,7 @@ const AdminViewApplication = () => {
                   const specialFields = {
                     births: ['birth_certificate_number', 'child_first_name', 'child_last_name', 'date_of_birth', 'mother_first_name', 'mother_last_name', 'mother_citizen_id', 'father_first_name', 'father_last_name', 'father_citizen_id'],
                     deaths: ['deceased_first_name', 'deceased_last_name', 'date_of_death', 'deceased_citizen_id', 'place_of_death', 'cause_of_death'],
-                    marriages: ['partner1_first_name', 'partner1_last_name', 'partner1_citizen_id', 'partner2_first_name', 'partner2_last_name', 'partner2_citizen_id', 'marriage_date', 'ceremony_location'],
+                    marriages: ['spouse1_first_name', 'spouse1_last_name', 'spouse1_citizen_id', 'spouse2_first_name', 'spouse2_last_name', 'spouse2_citizen_id', 'marriage_date', 'marriage_place'],
                     wwcc: ['application_number', 'first_name', 'last_name', 'citizen_id', 'date_of_birth', 'gender', 'email', 'phone_number', 'address', 'identity_documents']
                   };
 
