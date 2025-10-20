@@ -1,0 +1,53 @@
+/* Footer.module.css */
+
+.footer {
+  background-color: #555c66; /* Dark grey from image */
+  color: #f8f9fa;
+  padding: 4rem 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.8;
+}
+
+.footerTitle {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footerLink {
+  color: #e9ecef;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out;
+  display: inline-block;
+  padding: 0.2rem 0;
+}
+
+.footerLink:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.socialIcon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  margin-right: 0.75rem;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.socialIcon:hover {
+  background-color: #fff;
+  border-color: #fff;
+  color: #555c66;
+}
+

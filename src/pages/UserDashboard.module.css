@@ -1,0 +1,333 @@
+.dashboardContainer {
+    min-height: 100vh;
+    background-color: #f9fafb; /* Light Gray Background */
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- COLORS --- */
+/* Variables are used for color consistency across the file */
+:root {
+    --primary-blue-dark: #1d4ed8; /* Blue-700 equivalent */
+    --primary-blue-accent: #2563eb; /* Blue-600 equivalent */
+    --alert-yellow: #f59e0b; /* Yellow-600 equivalent */
+}
+
+.primaryAccentText {
+    color: var(--primary-blue-accent);
+}
+
+/* --- STATUS PILL COLORS --- */
+.statusCompleted {
+    color: #059669; /* text-green-600 */
+    background-color: #d1fae5; /* bg-green-100 */
+}
+.detailCompleted {
+    color: #059669;
+}
+
+.statusPending {
+    color: #d97706; /* text-yellow-600 */
+    background-color: #fffbeb; /* bg-yellow-100 */
+}
+.detailPending {
+    color: #d97706;
+}
+
+.statusAction, .statusNew {
+    color: #dc2626; /* text-red-600 */
+    background-color: #fee2e2; /* bg-red-100 */
+}
+.detailAction {
+    color: #dc2626;
+}
+
+/* --- HERO BANNER --- */
+.heroBanner {
+    padding: 5rem 0;
+    /* Gradient mimicking the landing page's blue saturation */
+    background: linear-gradient(to bottom right, var(--primary-blue-dark), #3b82f6);
+    color: white;
+    text-align: center;
+    box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.heroContent {
+    max-width: 72rem; /* max-w-7xl */
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.heroTitle {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+@media (min-width: 640px) {
+    .heroTitle {
+        font-size: 3rem; /* sm:text-5xl */
+    }
+}
+
+.heroSubtitle {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    max-width: 42rem;
+    margin: 0.5rem auto 0;
+}
+
+/* --- MAIN CONTENT & LAYOUT --- */
+.mainContent {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    margin-top: -2rem; /* Pulls content up over the hero */
+    position: relative;
+    z-index: 10;
+}
+@media (min-width: 640px) {
+    .mainContent {
+        padding: 3rem 1.5rem;
+    }
+}
+@media (min-width: 1024px) {
+    .mainContent {
+        padding: 3rem 2rem;
+    }
+}
+
+/* --- STATUS BAR (Action Required Banner) --- */
+.statusBar {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-left: 4px solid var(--alert-yellow);
+    margin-bottom: 3rem;
+    transition: transform 0.3s ease-in-out;
+}
+.statusBar:hover {
+    transform: scale(1.005);
+}
+
+.statusBarTitle {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.statusBarText {
+    font-weight: 500;
+    color: #374151;
+    display: flex;
+    align-items: center;
+}
+
+.statusBarIcon {
+    height: 1.25rem;
+    width: 1.25rem;
+    color: var(--alert-yellow);
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+.statusBarLink {
+    color: var(--primary-blue-accent);
+    font-weight: 600;
+    margin-left: 0.5rem;
+    text-decoration: none;
+}
+.statusBarLink:hover {
+    color: var(--primary-blue-dark);
+}
+
+/* --- CATEGORIES & GRID --- */
+.categorySectionWrapper {
+    margin-top: 4rem;
+}
+
+.categorySection {
+    margin-bottom: 4rem;
+}
+
+.categoryTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #93c5fd;
+    padding-bottom: 0.5rem;
+}
+
+.serviceGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+@media (min-width: 768px) {
+    .serviceGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (min-width: 1280px) {
+    .serviceGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* --- SERVICE CARD --- */
+.serviceCard {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.3s, transform 0.3s;
+    overflow: hidden;
+    border: 1px solid #f3f4f6;
+}
+.serviceCard:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.cardContent {
+    padding: 1.5rem;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.iconContainer {
+    padding: 0.75rem;
+    border-radius: 9999px;
+    background-color: var(--primary-blue-dark);
+    margin-right: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.icon {
+    height: 1.5rem;
+    width: 1.5rem;
+    color: white;
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.cardDescription {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 1rem;
+}
+
+/* --- LINK STATUS SECTION --- */
+.linkSection {
+    padding-top: 0.75rem;
+    border-top: 1px solid #f3f4f6;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.statusLabel {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+.linkItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.linkItem:hover {
+    background-color: #eff6ff; /* hover:bg-blue-50 */
+    border-color: #bfdbfe; /* hover:border-blue-200 */
+}
+
+.linkNameGroup {
+    display: flex;
+    align-items: center;
+}
+
+.linkStatusIcon {
+    height: 1rem;
+    width: 1rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.linkName {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1f2937;
+    transition: color 0.15s;
+}
+.linkItem:hover .linkName {
+    color: var(--primary-blue-dark);
+}
+
+.linkDetailGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.linkDetailText {
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+}
+
+.linkItem:hover .linkDetailText {
+    transform: translateX(0.25rem);
+}
+
+/* --- STATUS PILLS --- */
+.statusPill {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    flex-shrink: 0;
+    /* Responsive visibility control for smaller screens */
+    display: none;
+}
+@media (min-width: 640px) {
+    .statusPill {
+        display: inline-block;
+    }
+}
+
+/* --- FOOTER --- */
+.footer {
+    margin-top: 4rem;
+    padding: 1.5rem 0;
+    background-color: #f3f4f6;
+    border-top: 1px solid #e5e7eb;
+}
+
+.footerContent {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+}

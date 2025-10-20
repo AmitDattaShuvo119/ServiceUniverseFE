@@ -1,0 +1,13 @@
+.apply-btn {
+    background-color: #002664 !important;
+    color: white !important;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.apply-btn:hover {
+    background-color: #1d428c !important;
+    /* now hover color works */
+    color: white !important;
+    /* ensures text stays white */
+    transform: translateY(-2px);
+}

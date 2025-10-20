@@ -1,0 +1,350 @@
+import React, { useEffect, useState } from "react";
+import styles from "./UserDashboard.module.css";
+import {
+  Archive,
+  Home,
+  DollarSign,
+  FileText,
+  Users,
+  Globe,
+  Heart,
+  GraduationCap,
+  BarChart3,
+  Check,
+  Clock,
+  X,
+} from "lucide-react";
+
+// --- SERVICE DATA ---
+const SERVICE_DATA = [
+  {
+    id: "civil",
+    category: "Identity & Life Events",
+    title: "Civil Registration",
+    icon: Archive,
+    description:
+      "Register and manage official certificates for births, deaths, and marriages.",
+    links: [
+      {
+        name: "Register a Birth",
+        status: "Completed",
+        detail: "Certificate Ready",
+      },
+      { name: "Register a Death", status: "New", detail: "Start Application" },
+      {
+        name: "Register a Marriage",
+        status: "Pending",
+        detail: "Submitted 10/10/2025",
+      },
+    ],
+  },
+  {
+    id: "vaccination",
+    category: "Identity & Life Events",
+    title: "Vaccination Records",
+    icon: FileText,
+    description: "Access your official immunization history and records.",
+    links: [
+      {
+        name: "View Digital Certificate",
+        status: "Completed",
+        detail: "View PDF",
+      },
+    ],
+  },
+  {
+    id: "wwcc",
+    category: "Identity & Life Events",
+    title: "Working With Children Check (WWCC)",
+    icon: Users,
+    description: "Manage your screening check status and application details.",
+    links: [
+      {
+        name: "Check Status & Apply",
+        status: "Completed",
+        detail: "Card Valid until 2028",
+      },
+    ],
+  },
+  {
+    id: "ato",
+    category: "Financial & Tax",
+    title: "Australian Taxation Office (ATO)",
+    icon: DollarSign,
+    description: "Lodge income tax, manage superannuation, and business tax.",
+    links: [
+      {
+        name: "Income Tax Returns & Assessments",
+        status: "Action Required",
+        detail: "Lodge 2024 Return",
+      },
+      {
+        name: "Superannuation & Business Tax Services",
+        status: "Completed",
+        detail: "View Statements",
+      },
+    ],
+  },
+  {
+    id: "centerlink",
+    category: "Financial & Tax",
+    title: "Centerlink Payments",
+    icon: Home,
+    description: "Access government payments for financial assistance.",
+    links: [
+      {
+        name: "Payments for Financial Assistance",
+        status: "Completed",
+        detail: "Recent Payment: $500",
+      },
+    ],
+  },
+  {
+    id: "support",
+    category: "Financial & Tax",
+    title: "Social Support Payments",
+    icon: Heart,
+    description:
+      "Manage claims for Youth Allowance, JobSeeker, Age Pension, Disability Support, etc.",
+    links: [
+      {
+        name: "Manage All Support Payments",
+        status: "Pending",
+        detail: "JobSeeker Application",
+      },
+    ],
+  },
+  {
+    id: "immi",
+    category: "Immigration & Status",
+    title: "Home Affairs - Immi Account",
+    icon: Globe,
+    description:
+      "Track visa status, apply for citizenship, and manage sponsorships.",
+    links: [
+      {
+        name: "Visa Applications & Status Tracking",
+        status: "Pending",
+        detail: "Processing Time: 3 Months",
+      },
+      {
+        name: "Citizenship/Sponsorship Management",
+        status: "Completed",
+        detail: "View Sponsorship Details",
+      },
+    ],
+  },
+  {
+    id: "acs",
+    category: "Professional Development",
+    title: "Australian Computer Society (ACS)",
+    icon: GraduationCap,
+    description: "Skills assessment for migration and student memberships.",
+    links: [
+      { name: "Skills Assessment", status: "New", detail: "Start Application" },
+      {
+        name: "Student Memberships",
+        status: "Completed",
+        detail: "Membership ID: 12345",
+      },
+    ],
+  },
+  {
+    id: "family",
+    category: "Professional Development",
+    title: "Family History & Genealogy",
+    icon: BarChart3,
+    description: "Access historical records and build your family tree.",
+    links: [
+      {
+        name: "Search Records & Request Documents",
+        status: "Completed",
+        detail: "Last Search: 1 Week Ago",
+      },
+    ],
+  },
+];
+
+// --- UTILITY FUNCTION ---
+const getStatusClasses = (status) => {
+  switch (status) {
+    case "Completed":
+      return {
+        className: styles.statusCompleted,
+        icon: Check,
+        detailClass: styles.detailCompleted,
+      };
+    case "Pending":
+      return {
+        className: styles.statusPending,
+        icon: Clock,
+        detailClass: styles.detailPending,
+      };
+    case "Action Required":
+    case "New":
+      return {
+        className: styles.statusAction,
+        icon: X,
+        detailClass: styles.detailAction,
+      };
+    default:
+      return {
+        className: styles.statusDefault,
+        icon: FileText,
+        detailClass: styles.detailDefault,
+      };
+  }
+};
+
+const ServiceCard = ({ service }) => {
+  const Icon = service.icon;
+  return (
+    <div className={styles.serviceCard}>
+      <div className={styles.cardContent}>
+        <div className={styles.cardHeader}>
+          <div className={styles.iconContainer}>
+            <Icon className={styles.icon} />
+          </div>
+          <h3 className={styles.cardTitle}>{service.title}</h3>
+        </div>
+        <p className={styles.cardDescription}>{service.description}</p>
+
+        <div className={styles.linkSection}>
+          <p className={styles.statusLabel}>Your Current Status</p>
+          {service.links.map((link, idx) => {
+            const {
+              className,
+              icon: StatusIcon,
+              detailClass,
+            } = getStatusClasses(link.status);
+            return (
+              <a
+                key={idx}
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                className={styles.linkItem}
+              >
+                <div className={styles.linkNameGroup}>
+                  <StatusIcon
+                    className={`${styles.linkStatusIcon} ${detailClass}`}
+                  />
+                  <span className={styles.linkName}>{link.name}</span>
+                </div>
+                <div className={styles.linkDetailGroup}>
+                  <span className={`${styles.statusPill} ${className}`}>
+                    {link.status}
+                  </span>
+                  <span
+                    className={`${styles.linkDetailText} ${styles.primaryAccentText}`}
+                  >
+                    {link.detail} &rarr;
+                  </span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- MAIN DASHBOARD ---
+const UserDashboard = () => {
+  const [userData, setUserData] = useState(null);
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const token = storedUser?.token || "";
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!token) return;
+
+      try {
+        const res = await fetch("http://localhost:3000/api/citizens/profile", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        console.log("Fetched user data1:", data);
+        if (!data.success)
+          throw new Error(data.error || "Failed to fetch user data");
+
+        setUserData(data.data); // API returns only logged-in user's data
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+
+    fetchUserData();
+  }, [token]);
+
+  const categories = SERVICE_DATA.reduce((acc, service) => {
+    if (!acc[service.category]) acc[service.category] = [];
+    acc[service.category].push(service);
+    return acc;
+  }, {});
+
+  return (
+    <div className={styles.dashboardContainer}>
+      <div className={styles.heroBanner}>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>Your Personal Service Dashboard</h1>
+          <p className={styles.heroSubtitle}>
+            Quickly access all government and professional services, track
+            applications, and view documents.
+          </p>
+        </div>
+      </div>
+
+      <div className={styles.mainContent}>
+        {userData ? (
+          <div className={styles.personalInfoCard}>
+            <h2 className={styles.infoTitle}>Personal Information</h2>
+            <div className={styles.infoGrid}>
+              <p>
+                <strong>Full Name:</strong> {userData.first_name}{" "}
+                {userData.last_name}
+              </p>
+              <p>
+                <strong>Citizen ID: </strong>
+                {userData.citizen_id}
+              </p>{" "}
+              <p>
+                <strong>Email:</strong> {userData.email}
+              </p>
+              <p>
+                <strong>Phone:</strong> {userData.phone || "N/A"}
+              </p>
+              <p>
+                <strong>Address:</strong> {userData.address || "N/A"}
+              </p>
+              <p>
+                <strong>Date of Birth:</strong>{" "}
+                {userData.date_of_birth || "N/A"}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p>Loading your information...</p>
+        )}
+
+        <div className={styles.categorySectionWrapper}>
+          {Object.entries(categories).map(([category, services]) => (
+            <section key={category} className={styles.categorySection}>
+              <h2 className={styles.categoryTitle}>{category}</h2>
+              <div className={styles.serviceGrid}>
+                {services.map((service) => (
+                  <ServiceCard key={service.id} service={service} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UserDashboard;

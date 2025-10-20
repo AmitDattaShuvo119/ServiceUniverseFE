@@ -1,0 +1,29 @@
+.pageContainer {
+  padding: 4rem 0;
+  background-color: #f8f9fa; /* Light grey background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.formTitle {
+  font-weight: 700;
+  color: #333;
+}
+
+.sectionCard {
+  margin-bottom: 2rem;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.sectionCard .card-header {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.submitButton {
+  font-weight: 600;
+  padding: 0.8rem 2.5rem;
+  border-radius: 50px;
+}
+

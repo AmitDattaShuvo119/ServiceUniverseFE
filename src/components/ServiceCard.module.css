@@ -1,0 +1,46 @@
+/* ServiceCard.module.css */
+
+.serviceCard {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; /* Ensures content respects the border radius */
+}
+
+.serviceCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(13, 110, 253, 0.2);
+}
+
+.iconWrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e7f1ff, #d0e5ff);
+  color: #0d6efd;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.serviceCard:hover .iconWrapper {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.actionButton {
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 0.6rem 1.5rem;
+  border-width: 2px;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
